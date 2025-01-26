@@ -1,0 +1,41 @@
+1. Funkcje
+Funkcja: check_server_availability
+Sprawdza, czy serwer ma wystarczające zasoby na potrzeby nowej maszyny wirtualnej (CPU, RAM, Dysk).
+
+Funkcja: add_deployment_history
+Automatycznie dodaje wpis do tabeli deployment_history po dodaniu nowej maszyny wirtualnej. Wpis zawiera domyślny status "success" i wersję "1.0".
+
+2. Triggery
+
+Trigger: after_vm_insert_history
+Wywołuje funkcję add_deployment_history po dodaniu maszyny wirtualnej, aby automatycznie dodać pierwszy wpis w tabeli deployment_history.
+
+Trigger: prevent_negative_resources
+Zapobiega wstawieniu maszyny wirtualnej, jeśli serwer nie ma wystarczających zasobów (CPU, RAM, Dysk).
+
+3. Widoki
+Widok: server_usage_summary
+Pokazuje podsumowanie użycia zasobów na każdym serwerze, w tym liczba maszyn wirtualnych, sumaryczne wykorzystanie CPU, RAM, Dysku oraz dostępne zasoby.
+
+Widok: vm_deployment_status
+Pokazuje listę maszyn wirtualnych wraz z ich najnowszym wpisem w historii wdrożeń (status, wersja, data).
+
+4. Zapytania testowe
+Zapytanie: Sprawdzenie obciążenia serwera
+Wyświetla serwery z najmniejszą ilością dostępnych zasobów (CPU, RAM, Dysk).
+
+Zapytanie: Historia wdrożeń dla konkretnej maszyny wirtualnej
+Wyświetla wszystkie wpisy w tabeli deployment_history dla wybranej maszyny wirtualnej.
+
+Zapytanie: Maszyny z najniższym poziomem SLA
+Wyświetla maszyny wirtualne wraz z ich serwerami i przypisanym poziomem SLA, posortowane od najniższego gwarantowanego uptime.
+
+5. Dodatkowe ograniczenia i walidacje
+Constraint: chk_resources_positive
+Zapewnia, że available_cpu, available_ram, available_disk w tabeli server_resources nie mogą być ujemne.
+
+Constraint: chk_vm_resources_valid
+Zapewnia, że wartości cpu, ram, disk przy dodawaniu maszyny wirtualnej nie mogą przekraczać dostępnych zasobów serwera.
+
+6. Dodatkowe dane testowe
+Wygeneruj więcej serwerów, maszyn wirtualnych, poziomów SLA i wpisów w historii wdrożeń, aby przetestować zapytania oraz funkcjonalność wyzwalaczy i widoków.
