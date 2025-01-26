@@ -1,0 +1,7 @@
+remote_theme: pmarsceill/just-the-docs
+title: Database Project
+description: Documentation for the Database project
+baseurl: "/database-project"
+permalink: pretty
+color_scheme: dark
+
