@@ -7,7 +7,7 @@ nav_order: 1
 # Schemat bazy danych
 
 ## Diagram ERD
-![Diagram ERD](images/erd-diagram.png)
+![Diagram ERD](assets/diagram-erd.png)
 
 ## Tabele
 
