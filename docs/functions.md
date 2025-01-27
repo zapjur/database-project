@@ -22,12 +22,9 @@ END;
 $$ LANGUAGE plpgsql;
 ```
 
----
-
 ## Parametry wejściowe
 `treshold` (DECIMAL) - Próg gwarantowanego czasu działania w procentach, poniżej którego funkcja zwraca poziomy SLA.
 
----
 
 ## Wynik
 
@@ -36,7 +33,6 @@ Tabela zawierająca następujące kolumny:
 - `service_level` (VARCHAR) - Nazwa poziomu SLA.
 - `uptime_guarantee` (DECIMAL) - Gwarantowany czas działania w procentach.
 
----
 
 ## Przykład użycia
 
