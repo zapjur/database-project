@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Triggers Documentation
+title: Triggers
 nav_order: 3
 ---
 
@@ -16,7 +16,6 @@ AFTER INSERT ON virtual_machines
 FOR EACH ROW
 EXECUTE FUNCTION update_server_resources();
 ```
----
 
 ## Funkcja: `update_server_resources`
 
