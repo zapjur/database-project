@@ -1,3 +1,10 @@
+---
+layout: default
+title: Procedures
+nav_order: 4
+---
+
+
 # Procedury składowane
 
 ## Procedura: `bulk_update_sla_uptime`
