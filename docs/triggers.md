@@ -180,9 +180,11 @@ DELETE FROM virtual_machines WHERE id = 5;
 ```
 
 **Wpis w `logs`:**
-| event_type  | description           |
-|-------------|-----------------------|
-| VM_DELETED  | Usunięto maszynę VM-Prod |
+```sql
+    | event_type  | description           |
+    |-------------|-----------------------|
+    | VM_DELETED  | Usunięto maszynę VM-Prod |
+```
 
 ---
 
@@ -221,9 +223,11 @@ VALUES (100, 299.99, 'PENDING');
 
 **Wynik:**  
 Nowy wpis w `notifications`:
-| user_id | message                   |
-|---------|---------------------------|
-| 100     | Nowe rozliczenie: 299.99 PLN |
+```sql
+    | user_id | message                   |
+    |---------|---------------------------|
+    | 100     | Nowe rozliczenie: 299.99 PLN |
+```
 
 ---
 
@@ -264,10 +268,10 @@ WHERE id = 1;
 
 **Wynik:**  
 Nowy wpis w `notifications`:
-```markdown
-| user_id | message                                  |
-|---------|------------------------------------------|
-| 100     | Status rozliczenia zmieniony z PENDING na PAID |
+```sql
+    | user_id | message                                  |
+    |---------|------------------------------------------|
+    | 100     | Status rozliczenia zmieniony z PENDING na PAID |
 ```
 ---
 
