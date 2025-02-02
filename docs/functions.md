@@ -9,7 +9,7 @@ nav_order: 2
 ## Funkcja: `check_sla_threshold`
 
 ### Opis
-Funkcja `check_sla_threshold` służy do analizy poziomów SLA, które nie spełniają określonego progu gwarantowanego czasu działania (uptime). Zwraca tabelę zawierającą identyfikator SLA, nazwę poziomu SLA oraz gwarantowany czas działania dla tych poziomów SLA, które mają `uptime_guarantee` mniejszy niż podany próg.
+Funkcja `check_sla_threshold` zwraca poziomy SLA, których `uptime_guarantee` jest niższy niż podany próg **oraz są przypisane do serwerów z dostępnymi zasobami powyżej średniej**.
 
 ### Sygnatura
 ```sql
@@ -19,7 +19,13 @@ BEGIN
 RETURN QUERY
 SELECT s.id, s.service_level, s.uptime_guarantee
 FROM sla s
-WHERE s.uptime_guarantee < threshold;
+WHERE s.uptime_guarantee < threshold
+  AND s.id IN (
+      SELECT sr.sla_id
+      FROM server_resources sr
+      WHERE sr.available_cpu > (SELECT AVG(available_cpu) FROM server_resources)
+        AND sr.available_ram > (SELECT AVG(available_ram) FROM server_resources)
+  );
 END;
 $$ LANGUAGE plpgsql;
 ```
@@ -395,10 +401,46 @@ $$ LANGUAGE plpgsql;
 SELECT count_unread_notifications(4);
 ```
 
+## Funkcja: `get_users_above_avg_vms`
+
+### Opis
+Funkcja `get_users_above_avg_vms` zwraca użytkowników, którzy mają więcej maszyn wirtualnych niż średnia liczba maszyn na użytkownika.
+
+### Sygnatura
+```sql
+CREATE OR REPLACE FUNCTION get_users_above_avg_vms()
+RETURNS TABLE (user_id INT, username VARCHAR, vm_count INT) AS $$
+BEGIN
+RETURN QUERY
+SELECT u.id, u.username, COUNT(v.id) AS vm_count
+FROM users u
+LEFT JOIN virtual_machines v ON u.id = v.user_id
+GROUP BY u.id, u.username
+HAVING COUNT(v.id) > (
+    SELECT AVG(vm_count) 
+    FROM (SELECT COUNT(id) AS vm_count FROM virtual_machines GROUP BY user_id) AS subq
+);
+END;
+$$ LANGUAGE plpgsql;
+```
+
 ### Wynik
 
-| unread_count |
-|-------------|
-| 3           |
+| Kolumna     | Typ danych | Opis                                |
+|-------------|-----------|------------------------------------|
+| `user_id`   | INT       | Identyfikator użytkownika.         |
+| `username`  | VARCHAR   | Nazwa użytkownika.                 |
+| `vm_count`  | INT       | Liczba maszyn wirtualnych użytkownika. |
 
----
+### Przykład użycia
+```sql
+SELECT * FROM get_users_above_avg_vms();
+```
+
+### Wynik
+| user_id | username | vm_count |
+|---------|----------|---------|
+| 5       | jkowalski | 4       |
+
+
+
